@@ -11,6 +11,9 @@ describe Game do
     end
   end
 
+  # leer sobre pruebas enfocadas a comportamiento
+  # leer sobre comportamiento vs implementación
+
   it "fills board with only X's" do
     fill_many(1, 9, 'X')
     expect(game.board.board).to eq(["X", "X", "X", "X", "X", "X", "X", "X", "X"])
