@@ -14,9 +14,9 @@ class Computer < Player
     scores = []
     moves = []
 
-    return score(board, referee, depth) if referee(board).game_over?
+    return score(board, referee, depth) if referee.game_over?(board)
 
-    referee(board).possible_moves.each do |move|
+    referee.possible_moves(board).each do |move|
       board.set_token_at(move.to_i, token)
 
       next_player = @token == token ? @enemy_token : @token
@@ -38,8 +38,8 @@ class Computer < Player
   def score(board, referee, depth)
     best_score = 10
 
-    if referee(board).winner?
-      if referee(board).winner_token == @token
+    if referee.winner?(board)
+      if referee.winner_token(board) == @token
         return (best_score - depth)
       else
         return (depth - best_score)
