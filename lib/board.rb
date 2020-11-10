@@ -12,4 +12,8 @@ class Board
   def set_token_at(pos, mark)
     tokens[pos - 1] = mark
   end
+
+  def reset_token_at(pos)
+    tokens[pos - 1] = pos.to_s
+  end
 end

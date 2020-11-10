@@ -1,11 +1,8 @@
 class Player
-  attr_accessor :token
+  attr_accessor :token, :enemy_token
 
   def initialize(token)
     @token = token
-  end
-
-  def make_move(board, coordinate)
-    board.set_token_at(coordinate, @token)
+    @enemy_token = token == 'X' ? 'O' : 'X'
   end
 end

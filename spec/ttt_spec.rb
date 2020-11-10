@@ -2,6 +2,8 @@ require 'board.rb'
 require 'ui.rb'
 require 'referee.rb'
 require 'player.rb'
+require 'human.rb'
+require 'computer.rb'
 
 describe "Board" do
   let(:board) { Board.new }
@@ -10,6 +12,13 @@ describe "Board" do
     expect(board.get_token_at(7)).to eq('7')
     board.set_token_at(7, 'X')
     expect(board.get_token_at(7)).to eq('X')
+  end
+
+  it "resets token at occupied coordinate" do
+    board.set_token_at(7, 'X')
+    expect(board.get_token_at(7)).to eq('X')
+    board.reset_token_at(7)
+    expect(board.get_token_at(7)).to eq('7')
   end
 end
 
@@ -94,7 +103,7 @@ describe "Referee" do
     end
   end
 
-  describe "#winner_token?" do
+  describe "#winner_token" do
     it "returns 'X' as row winner token" do
       board = Board.new
       board.tokens = %w(_ X X
@@ -103,7 +112,7 @@ describe "Referee" do
       board.set_token_at(1, 'X')
       expect(referee.game_over?(board)).to eq(true)
       expect(referee.winner?(board)).to eq(true)
-      expect(referee.winner_token?(board)).to eq('X')
+      expect(referee.winner_token(board)).to eq('X')
     end
 
     it "returns 'O' as column winner token" do
@@ -114,7 +123,7 @@ describe "Referee" do
       board.set_token_at(9, 'O')
       expect(referee.game_over?(board)).to eq(true)
       expect(referee.winner?(board)).to eq(true)
-      expect(referee.winner_token?(board)).to eq('O')
+      expect(referee.winner_token(board)).to eq('O')
     end
 
     it "returns X as diagonal winner token" do
@@ -125,7 +134,7 @@ describe "Referee" do
       board.set_token_at(1, 'X')
       expect(referee.game_over?(board)).to eq(true)
       expect(referee.winner?(board)).to eq(true)
-      expect(referee.winner_token?(board)).to eq('X')
+      expect(referee.winner_token(board)).to eq('X')
     end
   end
 end
@@ -169,13 +178,32 @@ describe "UI" do
   end
 end
 
-describe Player do
-  let(:player) { Player.new('X') }
+describe Human do
+  let(:human) { Human.new('X') }
+
+  it "has an enemy token" do
+    expect(human.enemy_token).to eq('O')
+  end
 
   it "sets player token in board" do
     board = Board.new
     expect(board.get_token_at(1)).to eq('1')
-    player.make_move(board, 1)
+    human.make_move(board, 1)
     expect(board.get_token_at(1)).to eq('X')
+  end
+end
+
+describe Computer do
+  let(:computer) { Computer.new('O') }
+
+  it "blocks human win" do
+    board = Board.new
+    referee = Referee.new
+    board.set_token_at(1, 'X')
+    board.set_token_at(4, 'O')
+    board.set_token_at(2, 'X')
+    computer.make_move(board, referee)
+
+    expect(board.get_token_at(3)).to eq 'O'
   end
 end

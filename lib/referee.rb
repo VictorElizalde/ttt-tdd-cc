@@ -48,7 +48,7 @@ class Referee
     winner?(board) || possible_moves(board).length.zero?
   end
 
-  def winner_token?(board)
+  def winner_token(board)
     rows(board).each do |row|
       return row.uniq.first if row.uniq.length == 1
     end
