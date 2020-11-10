@@ -1,71 +1,7 @@
-
-class UI
-  def print(board)
-    <<-EOS
-          [#{board.tokens[0]},#{board.tokens[1]},#{board.tokens[2]}]
-          [#{board.tokens[3]},#{board.tokens[4]},#{board.tokens[5]}]
-          [#{board.tokens[6]},#{board.tokens[7]},#{board.tokens[8]}]
-    EOS
-  end
-end
-
-class Board
-  attr_accessor :tokens
-
-  def initialize
-    self.tokens = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
-  end
-
-  def get_token_at(pos)
-    tokens[pos - 1]
-  end
-
-  def set_token_at(pos, mark)
-    tokens[pos - 1] = mark
-  end
-end
-
-class Referee
-  def possible_moves(board)
-    board.tokens.reject { |token| token == 'X' || token == 'O' }
-  end
-
-  def row_winner?(board)
-    rows = board.tokens.each_slice(3).to_a
-    rows.each do |row|
-      return true if row.uniq == ['X'] || row.uniq == ['O']
-    end
-    false
-  end
-
-  def column_winner?(board)
-    columns = board.tokens.each_slice(3).to_a.transpose
-    columns.each do |column|
-      return true if column.uniq == ['X'] || column.uniq == ['O']
-    end
-    false
-  end
-
-  def diagonal_winner?(board)
-    diagonals = [[board.tokens[0], board.tokens[4], board.tokens[8]], [board.tokens[2], board.tokens[4], board.tokens[6]]]
-    diagonals.each do |diagonal|
-      return true if diagonal.uniq == ['X'] || diagonal.uniq == ['O']
-    end
-    false
-  end
-
-  def winner?(board)
-    row_winner?(board) || column_winner?(board) || diagonal_winner?(board)
-  end
-
-  def tie?(board)
-    possible_moves(board).length.zero? && !winner?(board)
-  end
-
-  def game_over?(board)
-    winner?(board) || possible_moves(board).length.zero?
-  end
-end
+require 'board.rb'
+require 'ui.rb'
+require 'referee.rb'
+require 'player.rb'
 
 describe "Board" do
   let(:board) { Board.new }
@@ -79,12 +15,6 @@ end
 
 describe "Referee" do
   let(:referee) { Referee.new }
-
-  it "returns possible moves" do
-    board = Board.new
-    board.set_token_at(1, 'X')
-    expect(referee.possible_moves(board)).to eq(["2","3","4","5","6","7","8","9"])
-  end
 
   it "returns winner for any of the rules to win" do
     board = Board.new
@@ -138,37 +68,114 @@ describe "Referee" do
     expect(referee.tie?(board)).to eq(true)
   end
 
-  it "returns true if game is over either by tie or a winner exists" do
-    board = Board.new
-    board.tokens = %w(O X X
-                      X X O
-                      O O X)
-    expect(referee.game_over?(board)).to eq(true)
+  describe "game_over?" do
+    it "returns true if board is full & there's a tie" do
+      board = Board.new
+      board.tokens = %w(O X X
+                        X X O
+                        O O _)
+      expect(referee.game_over?(board)).to eq(false)
+
+      board.set_token_at(9, 'X')
+      expect(referee.game_over?(board)).to eq(true)
+      expect(referee.winner?(board)).to eq(false)
+    end
+
+    it "returns true if there's a winner" do
+      board = Board.new
+      board.tokens = %w(_ X X
+                        X X O
+                        O O _)
+      expect(referee.game_over?(board)).to eq(false)
+
+      board.set_token_at(1, 'X')
+      expect(referee.game_over?(board)).to eq(true)
+      expect(referee.winner?(board)).to eq(true)
+    end
+  end
+
+  describe "#winner_token?" do
+    it "returns 'X' as row winner token" do
+      board = Board.new
+      board.tokens = %w(_ X X
+                        X X O
+                        O O _)
+      board.set_token_at(1, 'X')
+      expect(referee.game_over?(board)).to eq(true)
+      expect(referee.winner?(board)).to eq(true)
+      expect(referee.winner_token?(board)).to eq('X')
+    end
+
+    it "returns 'O' as column winner token" do
+      board = Board.new
+      board.tokens = %w(O X O
+                        X X O
+                        X O _)
+      board.set_token_at(9, 'O')
+      expect(referee.game_over?(board)).to eq(true)
+      expect(referee.winner?(board)).to eq(true)
+      expect(referee.winner_token?(board)).to eq('O')
+    end
+
+    it "returns X as diagonal winner token" do
+      board = Board.new
+      board.tokens = %w(_ X X
+                        X X O
+                        O O X)
+      board.set_token_at(1, 'X')
+      expect(referee.game_over?(board)).to eq(true)
+      expect(referee.winner?(board)).to eq(true)
+      expect(referee.winner_token?(board)).to eq('X')
+    end
   end
 end
 
 describe "UI" do
-    let(:ui) { UI.new }
+  let(:ui) { UI.new }
 
-    it "prints empty board with 1 to 9 coordinates" do
-      board = Board.new
-      expect(ui.print(board)).to eq(<<-EOS
-          [1,2,3]
-          [4,5,6]
-          [7,8,9]
-        EOS
-      )
-    end
+  it "prints empty board with 1 to 9 coordinates" do
+    board = Board.new
+    expect(ui.print(board)).to eq(<<-EOS
+        [1,2,3]
+        [4,5,6]
+        [7,8,9]
+      EOS
+    )
+  end
 
-    it "prints board with player marks" do
-      board = Board.new
-      board.set_token_at(5, "X")
-      board.set_token_at(9, "O")
-      expect(ui.print(board)).to eq(<<-EOS
-          [1,2,3]
-          [4,X,6]
-          [7,8,O]
-        EOS
-      )
-    end
+  it "prints board with player marks" do
+    board = Board.new
+    board.set_token_at(5, "X")
+    board.set_token_at(9, "O")
+    expect(ui.print(board)).to eq(<<-EOS
+        [1,2,3]
+        [4,X,6]
+        [7,8,O]
+      EOS
+    )
+  end
+
+  it "prints user instruction for token location" do
+    expect { ui.prints_user_instructions }.to output("Select coordinate between 1 and 9\n").to_stdout
+  end
+
+  it "sets token in user input coordinate" do
+    board = Board.new
+    user_input = '1'
+    expect(ui.receive_token_coordinate(user_input)).to eq(1)
+    expect(board.get_token_at(1)).to eq('1')
+    board.set_token_at(ui.receive_token_coordinate(user_input), 'X')
+    expect(board.get_token_at(1)).to eq('X')
+  end
+end
+
+describe Player do
+  let(:player) { Player.new('X') }
+
+  it "sets player token in board" do
+    board = Board.new
+    expect(board.get_token_at(1)).to eq('1')
+    player.make_move(board, 1)
+    expect(board.get_token_at(1)).to eq('X')
+  end
 end
