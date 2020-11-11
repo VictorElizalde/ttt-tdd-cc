@@ -1,7 +1,7 @@
 require_relative 'player'
 
 class Human < Player
-  def make_move(board, coordinate)
-    board.set_token_at(coordinate, @token)
+  def make_move(game, board, coordinate)
+    board.set_token_at(game, coordinate, @token)
   end
 end

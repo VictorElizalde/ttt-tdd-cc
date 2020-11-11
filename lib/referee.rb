@@ -1,64 +1,43 @@
 class Referee
-  def possible_moves(board)
-    board.tokens.reject { |token| token == 'X' || token == 'O' }
+  def possible_moves(game)
+    game.tokens.reject { |token| token == 'X' || token == 'O' }
   end
 
-  def rows(board)
-    board.tokens.each_slice(3).to_a
-  end
+  def winner?(game)
+    all_board = rows(game) + columns(game) + diagonals(game)
 
-  def columns(board)
-    board.tokens.each_slice(3).to_a.transpose
-  end
-
-  def diagonals(board)
-    [[board.tokens[0], board.tokens[4], board.tokens[8]], [board.tokens[2], board.tokens[4], board.tokens[6]]]
-  end
-
-  def row_winner?(board)
-    rows(board).each do |row|
-      return true if row.uniq == ['X'] || row.uniq == ['O']
+    all_board.each do |combination|
+      return true if combination.uniq == ['X'] || combination.uniq == ['O']
     end
     false
   end
 
-  def column_winner?(board)
-    columns(board).each do |column|
-      return true if column.uniq == ['X'] || column.uniq == ['O']
-    end
-    false
+  def tie?(game)
+    possible_moves(game).length.zero? && !winner?(game)
   end
 
-  def diagonal_winner?(board)
-    diagonals(board).each do |diagonal|
-      return true if diagonal.uniq == ['X'] || diagonal.uniq == ['O']
-    end
-    false
+  def game_over?(game)
+    winner?(game) || possible_moves(game).length.zero?
   end
 
-  def winner?(board)
-    row_winner?(board) || column_winner?(board) || diagonal_winner?(board)
-  end
+  def winner_token(game)
+    all_board = rows(game) + columns(game) + diagonals(game)
 
-  def tie?(board)
-    possible_moves(board).length.zero? && !winner?(board)
-  end
-
-  def game_over?(board)
-    winner?(board) || possible_moves(board).length.zero?
-  end
-
-  def winner_token(board)
-    rows(board).each do |row|
-      return row.uniq.first if row.uniq.length == 1
-    end
-
-    columns(board).each do |column|
-      return column.uniq.first if column.uniq.length == 1
-    end
-
-    diagonals(board).each do |diagonal|
-      return diagonal.uniq.first if diagonal.uniq.length == 1
+    all_board.each do |combination|
+      return combination.uniq.first if combination.uniq.length == 1
     end
   end
+
+  private
+    def rows(game)
+      game.tokens.each_slice(3).to_a
+    end
+
+    def columns(game)
+      game.tokens.each_slice(3).to_a.transpose
+    end
+
+    def diagonals(game)
+      [[game.tokens[0], game.tokens[4], game.tokens[8]], [game.tokens[2], game.tokens[4], game.tokens[6]]]
+    end
 end
