@@ -7,8 +7,8 @@ class UI
     EOS
   end
 
-  def receive_token_coordinate(user_input = gets.chomp)
-    user_input.to_i
+  def receive_token_coordinate(user_input1 = gets.chomp, user_input2 = gets.chomp)
+    [user_input1.to_i, user_input2.to_i]
   end
 
   def prints_user_instructions

@@ -3,24 +3,24 @@ require_relative 'player'
 class Computer < Player
   attr_reader :optimal_move
 
-  def make_move(game, board, referee)
-    minimax(game, board, referee, @token, 0)
+  def make_move(data_translator, game, board, referee)
+    minimax(data_translator, game, board, referee, @token, 0)
     board.set_token_at(game, @optimal_move.to_i, @token)
   end
 
   private
 
-  def minimax(game, board, referee, token, depth)
+  def minimax(data_translator, game, board, referee, token, depth)
     scores = []
     moves = []
 
-    return score(game, referee, depth) if referee.game_over?(game)
+    return score(data_translator, game, referee, depth) if referee.game_over?(data_translator, game)
 
-    referee.possible_moves(game).each do |move|
+    referee.possible_moves(data_translator, game).each do |move|
       board.set_token_at(game, move.to_i, token)
 
       next_player = @token == token ? @enemy_token : @token
-      scores << minimax(game, board, referee, next_player, depth + 1)
+      scores << minimax(data_translator, game, board, referee, next_player, depth + 1)
       moves << move
 
       board.reset_token_at(game, move.to_i)
@@ -35,11 +35,11 @@ class Computer < Player
     end
   end
 
-  def score(game, referee, depth)
+  def score(data_translator, game, referee, depth)
     best_score = 10
 
-    if referee.winner?(game)
-      if referee.winner_token(game) == @token
+    if referee.winner?(data_translator, game)
+      if referee.winner_token(data_translator, game) == @token
         return (best_score - depth)
       else
         return (depth - best_score)
