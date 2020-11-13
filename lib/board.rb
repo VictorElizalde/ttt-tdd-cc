@@ -12,7 +12,7 @@ class Board
     matrix_rows = data_translator.get_tokens(game).each_slice(3).to_a
     game_matrix = Matrix[matrix_rows[0], matrix_rows[1], matrix_rows[2]]
     keys = [0,1,2,3,4,5,6,7,8]
-    
+
     game_matrix[coor1, coor2] = mark
 
     game_array = []
