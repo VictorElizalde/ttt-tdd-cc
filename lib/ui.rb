@@ -1,9 +1,9 @@
 class UI
-  def print(game)
+  def print(board)
     <<-EOS
-        [#{game.tokens[0]},#{game.tokens[1]},#{game.tokens[2]}]
-        [#{game.tokens[3]},#{game.tokens[4]},#{game.tokens[5]}]
-        [#{game.tokens[6]},#{game.tokens[7]},#{game.tokens[8]}]
+        [#{board.tokens[0]},#{board.tokens[1]},#{board.tokens[2]}]
+        [#{board.tokens[3]},#{board.tokens[4]},#{board.tokens[5]}]
+        [#{board.tokens[6]},#{board.tokens[7]},#{board.tokens[8]}]
     EOS
   end
 

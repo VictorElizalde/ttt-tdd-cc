@@ -1,15 +1,14 @@
 require 'ui.rb'
 require 'board.rb'
-require 'game.rb'
+require 'data_translator.rb'
 
 describe "UI" do
   let(:ui) { UI.new }
-  let(:board) { Board.new }
   let(:data_translator) { DataTranslator.new }
 
   it "prints empty board with 1 to 9 coordinates" do
-    game = Game.new
-    expect(ui.print(game)).to eq(<<-EOS
+    board = Board.new
+    expect(ui.print(board)).to eq(<<-EOS
         [1,2,3]
         [4,5,6]
         [7,8,9]
@@ -18,10 +17,10 @@ describe "UI" do
   end
 
   it "prints board with player marks" do
-    game = Game.new
-    board.set_token_at(game, 5, "X")
-    board.set_token_at(game, 9, "O")
-    expect(ui.print(game)).to eq(<<-EOS
+    board = Board.new
+    board.put_token_in_board(data_translator, 5, nil, "X")
+    board.put_token_in_board(data_translator, 9, nil, "O")
+    expect(ui.print(board)).to eq(<<-EOS
         [1,2,3]
         [4,X,6]
         [7,8,O]
@@ -34,12 +33,12 @@ describe "UI" do
   end
 
   it "sets token in user input coordinate" do
-    game = Game.new
+    board = Board.new
     user_input1 = '1'
     user_input2 = '1'
     expect(ui.receive_token_coordinate(user_input1, user_input2)).to eq([1, 1])
-    expect(board.get_token_at(game, 1)).to eq('1')
-    board.set_user_token_at(data_translator, game, ui.receive_token_coordinate(user_input1, user_input2), 'X')
-    expect(board.get_token_at(game, 5)).to eq('X')
+    expect(board.get_token_at(1)).to eq('1')
+    board.put_token_in_board(data_translator, nil, ui.receive_token_coordinate(user_input1, user_input2), 'X')
+    expect(board.get_token_at(5)).to eq('X')
   end
 end

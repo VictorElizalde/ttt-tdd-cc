@@ -4,7 +4,6 @@ require 'board.rb'
 
 describe Computer do
   let(:computer) { Computer.new('O') }
-  let(:board) { Board.new }
   let(:data_translator) { DataTranslator.new }
 
   it "has an enemy token" do
@@ -12,72 +11,72 @@ describe Computer do
   end
 
   it "blocks human win" do
-    game = Game.new
+    board = Board.new
     referee = Referee.new
-    board.set_token_at(game, 1, 'X')
-    board.set_token_at(game, 4, 'O')
-    board.set_token_at(game, 2, 'X')
-    computer.make_move(data_translator, game, board, referee)
+    board.put_token_in_board(data_translator, 1, nil, 'X')
+    board.put_token_in_board(data_translator, 4, nil, 'O')
+    board.put_token_in_board(data_translator, 2, nil, 'X')
+    computer.make_move(data_translator, board, referee)
 
-    expect(board.get_token_at(game, 3)).to eq 'O'
+    expect(board.get_token_at(3)).to eq 'O'
   end
 
   it "takes the win" do
-    game = Game.new
+    board = Board.new
     referee = Referee.new
-    board.set_token_at(game, 1, 'O')
-    board.set_token_at(game, 4, 'X')
-    board.set_token_at(game, 2, 'O')
-    board.set_token_at(game, 7, 'X')
-    computer.make_move(data_translator, game, board, referee)
+    board.put_token_in_board(data_translator, 1, nil, 'O')
+    board.put_token_in_board(data_translator, 4, nil, 'X')
+    board.put_token_in_board(data_translator, 2, nil, 'O')
+    board.put_token_in_board(data_translator, 7, nil, 'X')
+    computer.make_move(data_translator, board, referee)
 
-    expect(board.get_token_at(game, 3)).to eq 'O'
+    expect(board.get_token_at(3)).to eq 'O'
   end
 
   it "takes the win instead of blocking" do
-    game = Game.new
+    board = Board.new
     referee = Referee.new
-    board.set_token_at(game, 1, 'X')
-    board.set_token_at(game, 4, 'O')
-    board.set_token_at(game, 9, 'X')
-    board.set_token_at(game, 5, 'O')
-    board.set_token_at(game, 3, 'X')
-    computer.make_move(data_translator, game, board, referee)
+    board.put_token_in_board(data_translator, 1, nil, 'X')
+    board.put_token_in_board(data_translator, 4, nil, 'O')
+    board.put_token_in_board(data_translator, 9, nil, 'X')
+    board.put_token_in_board(data_translator, 5, nil, 'O')
+    board.put_token_in_board(data_translator, 3, nil, 'X')
+    computer.make_move(data_translator, board, referee)
 
-    expect(board.get_token_at(game, 6)).to eq 'O'
+    expect(board.get_token_at(6)).to eq 'O'
   end
 
   it "blocks diagonal win from human" do
-    game = Game.new
+    board = Board.new
     referee = Referee.new
-    board.set_token_at(game, 9, 'X')
-    board.set_token_at(game, 8, 'O')
-    board.set_token_at(game, 1, 'X')
-    computer.make_move(data_translator, game, board, referee)
+    board.put_token_in_board(data_translator, 9, nil, 'X')
+    board.put_token_in_board(data_translator, 8, nil, 'O')
+    board.put_token_in_board(data_translator, 1, nil, 'X')
+    computer.make_move(data_translator, board, referee)
 
-    expect(board.get_token_at(game, 5)).to eq 'O'
+    expect(board.get_token_at(5)).to eq 'O'
   end
 
   it "blocks column win from human" do
-    game = Game.new
+    board = Board.new
     referee = Referee.new
-    board.set_token_at(game, 9, 'X')
-    board.set_token_at(game, 8, 'O')
-    board.set_token_at(game, 6, 'X')
-    computer.make_move(data_translator, game, board, referee)
+    board.put_token_in_board(data_translator, 9, nil, 'X')
+    board.put_token_in_board(data_translator, 8, nil, 'O')
+    board.put_token_in_board(data_translator, 6, nil, 'X')
+    computer.make_move(data_translator, board, referee)
 
-    expect(board.get_token_at(game, 3)).to eq 'O'
+    expect(board.get_token_at(3)).to eq 'O'
   end
 
   it "finishes the game" do
-    game = Game.new
+    board = Board.new
     referee = Referee.new
-    game.tokens = {
+    board.tokens = {
                    0 => 'O', 1 => 'X', 2 => 'X',
                    3 => 'X', 4 => 'X', 5 => 'O',
                    6 => '7', 7 => 'O', 8 => 'X'
                   }
-    computer.make_move(data_translator, game, board, referee)
-    expect(board.get_token_at(game, 7)).to eq 'O'
+    computer.make_move(data_translator, board, referee)
+    expect(board.get_token_at(7)).to eq 'O'
   end
 end
