@@ -11,15 +11,19 @@ class Board
     }
   end
 
+  def get_tokens
+    @tokens.values
+  end
+
   def get_token_at(pos)
     @tokens[pos - 1]
   end
 
-  def put_token_in_board(data_translator, pos, coordinates, mark)
-    if coordinates == nil
-      set_token_at(pos, mark)
+  def put_token_in_board(coordinates, mark)
+    if coordinates.last == -1
+      set_token_at(coordinates.first, mark)
     else
-      set_user_token_at(data_translator, coordinates, mark)
+      set_user_token_at(coordinates, mark)
     end
   end
 
@@ -27,12 +31,12 @@ class Board
     @tokens[pos - 1] = pos.to_s
   end
 
-  def rows(data_translator)
-    data_translator.get_tokens(@tokens).each_slice(3).to_a
+  def rows
+    get_tokens.each_slice(3).to_a
   end
 
-  def columns(data_translator)
-    rows(data_translator).transpose
+  def columns
+    rows.transpose
   end
 
   def diagonals
@@ -44,9 +48,9 @@ class Board
       @tokens[pos - 1] = mark
     end
 
-    def set_user_token_at(data_translator, coordinates, mark)
+    def set_user_token_at(coordinates, mark)
       coor1, coor2 = coordinates.first, coordinates.last
-      matrix_rows = data_translator.get_tokens(@tokens).each_slice(3).to_a
+      matrix_rows = get_tokens.each_slice(3).to_a
       game_matrix = Matrix[matrix_rows[0], matrix_rows[1], matrix_rows[2]]
       keys = [0,1,2,3,4,5,6,7,8]
 

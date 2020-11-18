@@ -1,33 +1,31 @@
 require 'referee.rb'
 require 'board.rb'
-require 'data_translator.rb'
 
 describe "Referee" do
   let(:referee) { Referee.new }
-  let(:data_translator) { DataTranslator.new }
 
   it "returns horizontal winner" do
     board = Board.new
-    board.put_token_in_board(data_translator, 1, nil, 'X')
-    board.put_token_in_board(data_translator, 2, nil, 'X')
-    board.put_token_in_board(data_translator, 3, nil, 'X')
-    expect(referee.winner?(data_translator, board)).to eq(true)
+    board.put_token_in_board([1, -1], 'X')
+    board.put_token_in_board([2, -1], 'X')
+    board.put_token_in_board([3, -1], 'X')
+    expect(referee.winner?(board)).to eq(true)
   end
 
   it "returns vertical winner" do
     board1 = Board.new
-    board1.put_token_in_board(data_translator, 1, nil, 'X')
-    board1.put_token_in_board(data_translator, 4, nil, 'X')
-    board1.put_token_in_board(data_translator, 7, nil, 'X')
-    expect(referee.winner?(data_translator, board1)).to eq(true)
+    board1.put_token_in_board([1, -1], 'X')
+    board1.put_token_in_board([4, -1], 'X')
+    board1.put_token_in_board([7, -1], 'X')
+    expect(referee.winner?(board1)).to eq(true)
   end
 
   it "returns diagonal winner" do
     board2 = Board.new
-    board2.put_token_in_board(data_translator, 1, nil, 'X')
-    board2.put_token_in_board(data_translator, 5, nil, 'X')
-    board2.put_token_in_board(data_translator, 9, nil, 'X')
-    expect(referee.winner?(data_translator, board2)).to eq(true)
+    board2.put_token_in_board([1, -1], 'X')
+    board2.put_token_in_board([5, -1], 'X')
+    board2.put_token_in_board([9, -1], 'X')
+    expect(referee.winner?(board2)).to eq(true)
   end
 
   it "returns true if tie exists" do
@@ -37,7 +35,7 @@ describe "Referee" do
                    3 => 'X', 4 => 'X', 5 => 'O',
                    6 => 'O', 7 => 'O', 8 => 'X'
                   }
-    expect(referee.tie?(data_translator, board)).to eq(true)
+    expect(referee.tie?(board)).to eq(true)
   end
 
   describe "game_over?" do
@@ -48,11 +46,11 @@ describe "Referee" do
                      3 => 'X', 4 => 'X', 5 => 'O',
                      6 => 'O', 7 => 'O', 8 => '9'
                     }
-      expect(referee.game_over?(data_translator, board)).to eq(false)
+      expect(referee.game_over?(board)).to eq(false)
 
-      board.put_token_in_board(data_translator, 9, nil, 'X')
-      expect(referee.game_over?(data_translator, board)).to eq(true)
-      expect(referee.winner?(data_translator, board)).to eq(false)
+      board.put_token_in_board([9, -1], 'X')
+      expect(referee.game_over?(board)).to eq(true)
+      expect(referee.winner?(board)).to eq(false)
     end
 
     it "returns true if there's a winner" do
@@ -62,11 +60,11 @@ describe "Referee" do
                      3 => 'X', 4 => 'X', 5 => 'O',
                      6 => 'O', 7 => 'O', 8 => '9'
                     }
-      expect(referee.game_over?(data_translator, board)).to eq(false)
+      expect(referee.game_over?(board)).to eq(false)
 
-      board.put_token_in_board(data_translator, 1, nil, 'X')
-      expect(referee.game_over?(data_translator, board)).to eq(true)
-      expect(referee.winner?(data_translator, board)).to eq(true)
+      board.put_token_in_board([1, -1], 'X')
+      expect(referee.game_over?(board)).to eq(true)
+      expect(referee.winner?(board)).to eq(true)
     end
   end
 
@@ -78,10 +76,10 @@ describe "Referee" do
                      3 => 'X', 4 => 'X', 5 => 'O',
                      6 => 'O', 7 => 'O', 8 => '9'
                     }
-      board.put_token_in_board(data_translator, 1, nil, 'X')
-      expect(referee.game_over?(data_translator, board)).to eq(true)
-      expect(referee.winner?(data_translator, board)).to eq(true)
-      expect(referee.winner_token(data_translator, board)).to eq('X')
+      board.put_token_in_board([1, -1], 'X')
+      expect(referee.game_over?(board)).to eq(true)
+      expect(referee.winner?(board)).to eq(true)
+      expect(referee.winner_token(board)).to eq('X')
     end
 
     it "returns 'O' as column winner token" do
@@ -91,10 +89,10 @@ describe "Referee" do
                      3 => 'X', 4 => 'X', 5 => 'O',
                      6 => 'X', 7 => 'O', 8 => '9'
                     }
-      board.put_token_in_board(data_translator, 9, nil, 'O')
-      expect(referee.game_over?(data_translator, board)).to eq(true)
-      expect(referee.winner?(data_translator, board)).to eq(true)
-      expect(referee.winner_token(data_translator, board)).to eq('O')
+      board.put_token_in_board([9, -1], 'O')
+      expect(referee.game_over?(board)).to eq(true)
+      expect(referee.winner?(board)).to eq(true)
+      expect(referee.winner_token(board)).to eq('O')
     end
 
     it "returns X as diagonal winner token" do
@@ -104,10 +102,10 @@ describe "Referee" do
                      3 => 'X', 4 => 'X', 5 => 'O',
                      6 => 'O', 7 => 'O', 8 => 'X'
                     }
-      board.put_token_in_board(data_translator, 1, nil, 'X')
-      expect(referee.game_over?(data_translator, board)).to eq(true)
-      expect(referee.winner?(data_translator, board)).to eq(true)
-      expect(referee.winner_token(data_translator, board)).to eq('X')
+      board.put_token_in_board([1, -1], 'X')
+      expect(referee.game_over?(board)).to eq(true)
+      expect(referee.winner?(board)).to eq(true)
+      expect(referee.winner_token(board)).to eq('X')
     end
   end
 end

@@ -4,7 +4,6 @@ require 'board.rb'
 
 describe Computer do
   let(:computer) { Computer.new('O') }
-  let(:data_translator) { DataTranslator.new }
 
   it "has an enemy token" do
     expect(computer.enemy_token).to eq('X')
@@ -13,10 +12,10 @@ describe Computer do
   it "blocks human win" do
     board = Board.new
     referee = Referee.new
-    board.put_token_in_board(data_translator, 1, nil, 'X')
-    board.put_token_in_board(data_translator, 4, nil, 'O')
-    board.put_token_in_board(data_translator, 2, nil, 'X')
-    computer.make_move(data_translator, board, referee)
+    board.put_token_in_board([1, -1], 'X')
+    board.put_token_in_board([4, -1], 'O')
+    board.put_token_in_board([2, -1], 'X')
+    computer.make_move(board, referee)
 
     expect(board.get_token_at(3)).to eq 'O'
   end
@@ -24,11 +23,11 @@ describe Computer do
   it "takes the win" do
     board = Board.new
     referee = Referee.new
-    board.put_token_in_board(data_translator, 1, nil, 'O')
-    board.put_token_in_board(data_translator, 4, nil, 'X')
-    board.put_token_in_board(data_translator, 2, nil, 'O')
-    board.put_token_in_board(data_translator, 7, nil, 'X')
-    computer.make_move(data_translator, board, referee)
+    board.put_token_in_board([1, -1], 'O')
+    board.put_token_in_board([4, -1], 'X')
+    board.put_token_in_board([2, -1], 'O')
+    board.put_token_in_board([7, -1], 'X')
+    computer.make_move(board, referee)
 
     expect(board.get_token_at(3)).to eq 'O'
   end
@@ -36,12 +35,12 @@ describe Computer do
   it "takes the win instead of blocking" do
     board = Board.new
     referee = Referee.new
-    board.put_token_in_board(data_translator, 1, nil, 'X')
-    board.put_token_in_board(data_translator, 4, nil, 'O')
-    board.put_token_in_board(data_translator, 9, nil, 'X')
-    board.put_token_in_board(data_translator, 5, nil, 'O')
-    board.put_token_in_board(data_translator, 3, nil, 'X')
-    computer.make_move(data_translator, board, referee)
+    board.put_token_in_board([1, -1], 'X')
+    board.put_token_in_board([4, -1], 'O')
+    board.put_token_in_board([9, -1], 'X')
+    board.put_token_in_board([5, -1], 'O')
+    board.put_token_in_board([3, -1], 'X')
+    computer.make_move(board, referee)
 
     expect(board.get_token_at(6)).to eq 'O'
   end
@@ -49,10 +48,10 @@ describe Computer do
   it "blocks diagonal win from human" do
     board = Board.new
     referee = Referee.new
-    board.put_token_in_board(data_translator, 9, nil, 'X')
-    board.put_token_in_board(data_translator, 8, nil, 'O')
-    board.put_token_in_board(data_translator, 1, nil, 'X')
-    computer.make_move(data_translator, board, referee)
+    board.put_token_in_board([9, -1], 'X')
+    board.put_token_in_board([8, -1], 'O')
+    board.put_token_in_board([1, -1], 'X')
+    computer.make_move(board, referee)
 
     expect(board.get_token_at(5)).to eq 'O'
   end
@@ -60,10 +59,10 @@ describe Computer do
   it "blocks column win from human" do
     board = Board.new
     referee = Referee.new
-    board.put_token_in_board(data_translator, 9, nil, 'X')
-    board.put_token_in_board(data_translator, 8, nil, 'O')
-    board.put_token_in_board(data_translator, 6, nil, 'X')
-    computer.make_move(data_translator, board, referee)
+    board.put_token_in_board([9, -1], 'X')
+    board.put_token_in_board([8, -1], 'O')
+    board.put_token_in_board([6, -1], 'X')
+    computer.make_move(board, referee)
 
     expect(board.get_token_at(3)).to eq 'O'
   end
@@ -76,7 +75,7 @@ describe Computer do
                    3 => 'X', 4 => 'X', 5 => 'O',
                    6 => '7', 7 => 'O', 8 => 'X'
                   }
-    computer.make_move(data_translator, board, referee)
+    computer.make_move(board, referee)
     expect(board.get_token_at(7)).to eq 'O'
   end
 end
