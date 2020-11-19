@@ -6,9 +6,9 @@ $ bundle install
 ```
 To run all tests:
 ```
-> $ rspec
+$ rspec
 ```
 If you want to run a certain test file:
 ```
-> $ rspec spec/file_spec.rb
+$ rspec spec/file_spec.rb
 ```
