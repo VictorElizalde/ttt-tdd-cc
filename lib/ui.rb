@@ -1,9 +1,9 @@
 class UI
   def print(board)
     <<-EOS
-        [#{board.tokens[0]},#{board.tokens[1]},#{board.tokens[2]}]
-        [#{board.tokens[3]},#{board.tokens[4]},#{board.tokens[5]}]
-        [#{board.tokens[6]},#{board.tokens[7]},#{board.tokens[8]}]
+        [#{board.get_token_at(1)},#{board.get_token_at(2)},#{board.get_token_at(3)}]
+        [#{board.get_token_at(4)},#{board.get_token_at(5)},#{board.get_token_at(6)}]
+        [#{board.get_token_at(7)},#{board.get_token_at(8)},#{board.get_token_at(9)}]
     EOS
   end
 

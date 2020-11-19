@@ -1,11 +1,16 @@
 require_relative 'player'
 
 class Computer < Player
-  attr_reader :optimal_move
+  attr_reader :optimal_move, :enemy_token
+
+  def initialize(token)
+    super(token)
+    @enemy_token = @token == 'X' ? 'O' : 'X'
+  end
 
   def make_move(board, referee)
     minimax(board, referee, @token, 0)
-    board.put_token_in_board([@optimal_move.to_i, -1], @token)
+    board.set_token_at(@optimal_move.to_i, @token)
   end
 
   private
@@ -17,7 +22,7 @@ class Computer < Player
     return score(board, referee, depth) if referee.game_over?(board)
 
     referee.possible_moves(board).each do |move|
-      board.put_token_in_board([move.to_i, -1], token)
+      board.set_token_at(move.to_i, token)
 
       next_player = @token == token ? @enemy_token : @token
       scores << minimax(board, referee, next_player, depth + 1)
