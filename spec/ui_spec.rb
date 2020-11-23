@@ -3,9 +3,10 @@ require 'board.rb'
 
 describe "UI" do
   let(:ui) { UI.new }
+  let(:board) { Board.new }
+  let(:human) { Human.new('X') }
 
   it "prints empty board with 1 to 9 coordinates" do
-    board = Board.new
     expect(ui.print(board)).to eq(<<-EOS
         [1,2,3]
         [4,5,6]
@@ -15,9 +16,9 @@ describe "UI" do
   end
 
   it "prints board with player marks" do
-    board = Board.new
-    board.put_token_in_board([5, -1], "X")
-    board.put_token_in_board([9, -1], "O")
+    board.set_token_at(5, "X")
+    board.set_token_at(9, "O")
+
     expect(ui.print(board)).to eq(<<-EOS
         [1,2,3]
         [4,X,6]
@@ -31,12 +32,14 @@ describe "UI" do
   end
 
   it "sets token in user input coordinate" do
-    board = Board.new
     user_input1 = '1'
     user_input2 = '1'
+
     expect(ui.receive_token_coordinate(user_input1, user_input2)).to eq([1, 1])
     expect(board.get_token_at(1)).to eq('1')
-    board.put_token_in_board(ui.receive_token_coordinate(user_input1, user_input2), 'X')
+
+    human.make_move(board, ui.receive_token_coordinate(user_input1, user_input2))
+
     expect(board.get_token_at(5)).to eq('X')
   end
 end
