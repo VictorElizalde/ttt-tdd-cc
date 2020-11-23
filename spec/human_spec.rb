@@ -1,6 +1,6 @@
-require 'human.rb'
-require 'board.rb'
-require 'ui.rb'
+require File.join(File.dirname(__FILE__), '..', 'lib', 'human')
+require File.join(File.dirname(__FILE__), '..', 'lib', 'board')
+require File.join(File.dirname(__FILE__), '..', 'lib', 'ui')
 
 describe Human do
   let(:human) { Human.new('X') }

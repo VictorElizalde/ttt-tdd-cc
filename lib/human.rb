@@ -1,4 +1,4 @@
-require_relative 'player'
+require File.join(File.dirname(__FILE__), 'player')
 
 class Human < Player
   def make_move(board, coordinates)
@@ -10,7 +10,6 @@ class Human < Player
       coor1, coor2 = coordinates.first, coordinates.last
       matrix_rows = board.get_tokens.each_slice(3).to_a
       game_matrix = Matrix[matrix_rows[0], matrix_rows[1], matrix_rows[2]]
-      keys = [0,1,2,3,4,5,6,7,8]
 
       game_matrix[coor1, coor2] = mark
 
@@ -19,6 +18,8 @@ class Human < Player
         game_array << token
       end
 
-      board.tokens = keys.zip(game_array).to_h
+      game_array.each_with_index do |val, index|
+        board.set_token_at(index + 1, val)
+      end
     end
 end
