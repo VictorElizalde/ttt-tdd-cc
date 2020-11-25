@@ -1,4 +1,4 @@
-require 'board.rb'
+require File.join(File.dirname(__FILE__), '..', 'lib', 'board')
 
 describe "Board" do
   let(:board) { Board.new }

@@ -1,20 +1,27 @@
-require 'computer.rb'
-require 'game.rb'
-require 'board.rb'
+require File.join(File.dirname(__FILE__), '..', 'lib', 'computer')
+require File.join(File.dirname(__FILE__), '..', 'lib', 'game')
+require File.join(File.dirname(__FILE__), '..', 'lib', 'board')
+
 
 describe Computer do
   let(:computer) { Computer.new('O') }
   let(:board) { Board.new }
   let(:referee) { Referee.new }
 
+  def set_board_values(board, hash_values)
+    board.tokens = hash_values
+  end
+
   it "has an enemy token" do
     expect(computer.enemy_token).to eq('X')
   end
 
   it "blocks human win" do
-    board.set_token_at(1, 'X')
-    board.set_token_at(4, 'O')
-    board.set_token_at(2, 'X')
+    set_board_values(board, {
+      0 => 'X', 1 => 'X', 2 => '3',
+      3 => 'O', 4 => '5', 5 => '6',
+      6 => '7', 7 => '8', 8 => '9'
+    })
 
     computer.make_move(board, referee)
 
@@ -22,10 +29,11 @@ describe Computer do
   end
 
   it "takes the win" do
-    board.set_token_at(1, 'O')
-    board.set_token_at(4, 'X')
-    board.set_token_at(2, 'O')
-    board.set_token_at(7, 'X')
+    set_board_values(board, {
+      0 => 'O', 1 => 'O', 2 => '3',
+      3 => 'X', 4 => '5', 5 => '6',
+      6 => 'X', 7 => '8', 8 => '9'
+    })
 
     computer.make_move(board, referee)
 
@@ -33,11 +41,11 @@ describe Computer do
   end
 
   it "takes the win instead of blocking" do
-    board.set_token_at(1, 'X')
-    board.set_token_at(4, 'O')
-    board.set_token_at(9, 'X')
-    board.set_token_at(5, 'O')
-    board.set_token_at(3, 'X')
+    set_board_values(board, {
+      0 => 'X', 1 => '2', 2 => 'X',
+      3 => 'O', 4 => 'O', 5 => '6',
+      6 => '7', 7 => '8', 8 => 'X'
+    })
 
     computer.make_move(board, referee)
 
@@ -45,9 +53,11 @@ describe Computer do
   end
 
   it "blocks diagonal win from human" do
-    board.set_token_at(9, 'X')
-    board.set_token_at(8, 'O')
-    board.set_token_at(1, 'X')
+    set_board_values(board, {
+      0 => 'X', 1 => '2', 2 => '3',
+      3 => '4', 4 => '5', 5 => '6',
+      6 => '7', 7 => 'O', 8 => 'X'
+    })
 
     computer.make_move(board, referee)
 
@@ -55,9 +65,11 @@ describe Computer do
   end
 
   it "blocks column win from human" do
-    board.set_token_at(9, 'X')
-    board.set_token_at(8, 'O')
-    board.set_token_at(6, 'X')
+    set_board_values(board, {
+      0 => '1', 1 => '2', 2 => '3',
+      3 => '4', 4 => '5', 5 => 'X',
+      6 => '7', 7 => 'O', 8 => 'X'
+    })
 
     computer.make_move(board, referee)
 
@@ -65,11 +77,11 @@ describe Computer do
   end
 
   it "finishes the game" do
-    board.tokens = {
-                   0 => 'O', 1 => 'X', 2 => 'X',
-                   3 => 'X', 4 => 'X', 5 => 'O',
-                   6 => '7', 7 => 'O', 8 => 'X'
-                  }
+    set_board_values(board, {
+      0 => 'O', 1 => 'X', 2 => 'X',
+      3 => 'X', 4 => 'X', 5 => 'O',
+      6 => '7', 7 => 'O', 8 => 'X'
+    })
 
     computer.make_move(board, referee)
 

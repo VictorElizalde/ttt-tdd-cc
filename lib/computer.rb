@@ -1,4 +1,4 @@
-require_relative 'player'
+require File.join(File.dirname(__FILE__), 'player')
 
 class Computer < Player
   attr_reader :optimal_move, :enemy_token
