@@ -1,4 +1,5 @@
-require File.join(File.dirname(__FILE__), 'player')
+$LOAD_PATH.unshift File.expand_path(".", "lib")
+require 'player'
 
 class Human < Player
   def make_move(board, coordinates)

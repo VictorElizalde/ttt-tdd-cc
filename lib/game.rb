@@ -1,7 +1,9 @@
-require File.join(File.dirname(__FILE__), 'board')
-require File.join(File.dirname(__FILE__), 'computer')
-require File.join(File.dirname(__FILE__), 'human')
-require File.join(File.dirname(__FILE__), 'ui')
+$LOAD_PATH.unshift File.expand_path(".", "lib")
+require 'board'
+require 'computer'
+require 'human'
+require 'ui'
+
 
 class Game
   attr_accessor :board, :human, :computer, :ui, :human_turn, :referee
@@ -28,12 +30,12 @@ class Game
     @computer.make_move(@board, @referee)
   end
 
-  def human_move
-    coordinates = @ui.receive_token_coordinate
+  def human_move_succesful?(coordinates)
     if available_location?(coordinates)
       @human.make_move(@board, coordinates)
+      return true
     else
-      human_move
+      return false
     end
   end
 

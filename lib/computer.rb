@@ -1,4 +1,5 @@
-require File.join(File.dirname(__FILE__), 'player')
+$LOAD_PATH.unshift File.expand_path(".", "lib")
+require 'player'
 
 class Computer < Player
   attr_reader :optimal_move, :enemy_token

@@ -1,6 +1,7 @@
-require File.join(File.dirname(__FILE__), '..', 'lib', 'human')
-require File.join(File.dirname(__FILE__), '..', 'lib', 'board')
-require File.join(File.dirname(__FILE__), '..', 'lib', 'ui')
+$LOAD_PATH.unshift File.expand_path(".", "lib")
+require 'human'
+require 'board'
+require 'ui'
 
 describe Human do
   let(:human) { Human.new('X') }
