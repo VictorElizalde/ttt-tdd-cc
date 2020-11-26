@@ -1,4 +1,5 @@
-require File.join(File.dirname(__FILE__), '..', 'lib', 'board')
+$LOAD_PATH.unshift File.expand_path(".", "lib")
+require 'board'
 
 describe "Board" do
   let(:board) { Board.new }

@@ -1,61 +1,64 @@
-require File.join(File.dirname(__FILE__), '..', 'lib', 'referee')
-require File.join(File.dirname(__FILE__), '..', 'lib', 'board')
+$LOAD_PATH.unshift File.expand_path(".", "lib")
+require 'referee'
+require 'board'
 
 describe "Referee" do
   let(:referee) { Referee.new }
   let(:board) { Board.new }
 
-  def set_board_values(board, hash_values)
-    board.tokens = hash_values
+  def set_board_values(board, array_values)
+    array_values.each_with_index do |val, index|
+      board.set_token_at(index + 1, val)
+    end
   end
 
   it "returns horizontal winner" do
-    set_board_values(board, {
-      0 => 'X', 1 => 'X', 2 => 'X',
-      3 => '4', 4 => '5', 5 => '6',
-      6 => '5', 7 => '8', 8 => '9'
-    })
+    set_board_values(board, %w(
+      X X X
+      _ _ _
+      _ _ _
+    ))
 
     expect(referee.winner?(board)).to eq(true)
   end
 
   it "returns vertical winner" do
-    set_board_values(board, {
-      0 => 'X', 1 => '2', 2 => '3',
-      3 => 'X', 4 => '5', 5 => '6',
-      6 => 'X', 7 => '8', 8 => '9'
-    })
+    set_board_values(board, %w(
+      X _ _
+      X _ _
+      X _ _
+    ))
 
     expect(referee.winner?(board)).to eq(true)
   end
 
   it "returns diagonal winner" do
-    set_board_values(board, {
-      0 => 'X', 1 => '2', 2 => '3',
-      3 => '4', 4 => 'X', 5 => '6',
-      6 => '7', 7 => '8', 8 => 'X'
-    })
+    set_board_values(board, %w(
+      X _ _
+      _ X _
+      _ _ X
+    ))
 
     expect(referee.winner?(board)).to eq(true)
   end
 
   it "returns true if tie exists" do
-    set_board_values(board, {
-      0 => 'O', 1 => 'X', 2 => 'X',
-      3 => 'X', 4 => 'X', 5 => 'O',
-      6 => 'O', 7 => 'O', 8 => 'X'
-    })
+    set_board_values(board, %w(
+      O X X
+      X X O
+      O O X
+    ))
 
     expect(referee.tie?(board)).to eq(true)
   end
 
   describe "game_over?" do
     it "returns true if board is full & there's a tie" do
-      set_board_values(board, {
-        0 => 'O', 1 => 'X', 2 => 'X',
-        3 => 'X', 4 => 'X', 5 => 'O',
-        6 => 'O', 7 => 'O', 8 => '9'
-      })
+      set_board_values(board, %w(
+        O X X
+        X X O
+        O O _
+      ))
 
       expect(referee.game_over?(board)).to eq(false)
 
@@ -66,11 +69,11 @@ describe "Referee" do
     end
 
     it "returns true if there's a winner" do
-      set_board_values(board, {
-        0 => '1', 1 => 'X', 2 => 'X',
-        3 => 'X', 4 => 'X', 5 => 'O',
-        6 => 'O', 7 => 'O', 8 => '9'
-      })
+      set_board_values(board, %w(
+        _ X X
+        X X O
+        O O _
+      ))
 
       expect(referee.game_over?(board)).to eq(false)
 
@@ -83,11 +86,11 @@ describe "Referee" do
 
   describe "#winner_token" do
     it "returns 'X' as row winner token" do
-      set_board_values(board, {
-        0 => '1', 1 => 'X', 2 => 'X',
-        3 => 'X', 4 => 'X', 5 => 'O',
-        6 => 'O', 7 => 'O', 8 => '9'
-      })
+      set_board_values(board, %w(
+        _ X X
+        X X O
+        O O _
+      ))
 
       board.set_token_at(1, 'X')
 
@@ -97,11 +100,11 @@ describe "Referee" do
     end
 
     it "returns 'O' as column winner token" do
-      set_board_values(board, {
-        0 => 'O', 1 => 'X', 2 => 'O',
-        3 => 'X', 4 => 'X', 5 => 'O',
-        6 => 'X', 7 => 'O', 8 => '9'
-      })
+      set_board_values(board, %w(
+        O X O
+        X X O
+        X O _
+      ))
 
       board.set_token_at(9, 'O')
 
@@ -111,11 +114,11 @@ describe "Referee" do
     end
 
     it "returns X as diagonal winner token" do
-      set_board_values(board, {
-        0 => '1', 1 => 'X', 2 => 'X',
-        3 => 'X', 4 => 'X', 5 => 'O',
-        6 => 'O', 7 => 'O', 8 => 'X'
-      })
+      set_board_values(board, %w(
+        _ X X
+        X X O
+        O O X
+      ))
 
       board.set_token_at(1, 'X')
 

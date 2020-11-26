@@ -1,5 +1,6 @@
-require File.join(File.dirname(__FILE__), '..', 'lib', 'ui')
-require File.join(File.dirname(__FILE__), '..', 'lib', 'board')
+$LOAD_PATH.unshift File.expand_path(".", "lib")
+require 'ui'
+require 'board'
 
 describe "UI" do
   let(:ui) { UI.new }
