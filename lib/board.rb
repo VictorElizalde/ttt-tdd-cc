@@ -44,9 +44,4 @@ class Board
       set_token_at(index + 1, val)
     end
   end
-
-  def get_board_info
-    matrix_rows = get_tokens.each_slice(3).to_a
-    game_matrix = Matrix[matrix_rows[0], matrix_rows[1], matrix_rows[2]]
-  end
 end

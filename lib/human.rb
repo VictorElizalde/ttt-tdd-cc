@@ -22,7 +22,7 @@ class Human < Player
   private
     def set_user_token_at(board, coordinates, mark)
       coor1, coor2 = coordinates.first, coordinates.last
-      board_info = board.get_board_info
+      board_info = convert_to_matrix(board)
 
       board_info[coor1, coor2] = mark
 
@@ -36,8 +36,13 @@ class Human < Player
 
     def available_location?(board, coordinates)
       coor1, coor2 = coordinates.first, coordinates.last
-      board_info = board.get_board_info
+      board_info = convert_to_matrix(board)
 
       return board_info[coor1, coor2] != 'X' && board_info[coor1, coor2] != 'O'
+    end
+
+    def convert_to_matrix(board)
+      matrix_rows = board.rows
+      game_matrix = Matrix[matrix_rows[0], matrix_rows[1], matrix_rows[2]]
     end
 end
