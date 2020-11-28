@@ -31,16 +31,4 @@ describe "UI" do
   it "prints user instruction for token location" do
     expect { ui.prints_user_instructions }.to output("Select coordinate between 1 and 9\n").to_stdout
   end
-
-  it "sets token in user input coordinate" do
-    user_input1 = '1'
-    user_input2 = '1'
-
-    expect(ui.receive_token_coordinate(user_input1, user_input2)).to eq([1, 1])
-    expect(board.get_token_at(1)).to eq('1')
-
-    human.make_move?(board, ui.receive_token_coordinate(user_input1, user_input2))
-
-    expect(board.get_token_at(5)).to eq('X')
-  end
 end

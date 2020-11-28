@@ -2,13 +2,21 @@ $LOAD_PATH.unshift File.expand_path(".", "lib")
 require 'player'
 
 class Human < Player
-  def make_move?(board, coordinates)
+  def make_move?(board, coordinates = nil)
+    if coordinates == nil
+      coordinates = receive_token_coordinate()
+    end
+
     if available_location?(board, coordinates)
       set_user_token_at(board, coordinates, @token)
       return true
     else
       return false
     end
+  end
+
+  def receive_token_coordinate(user_input1 = gets.chomp, user_input2 = gets.chomp)
+    [user_input1.to_i, user_input2.to_i]
   end
 
   private

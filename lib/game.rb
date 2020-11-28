@@ -29,7 +29,7 @@ class Game
     @computer.make_move(@board, @referee)
   end
 
-  def human_move_succesful?(coordinates)
+  def human_move_succesful?(coordinates = nil)
     return @human.make_move?(@board, coordinates)
   end
 end
