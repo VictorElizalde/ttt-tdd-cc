@@ -1,7 +1,6 @@
 $LOAD_PATH.unshift File.expand_path(".", "lib")
 require 'board'
 require 'game'
-require 'player'
 require 'computer'
 require 'human'
 require 'referee'

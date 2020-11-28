@@ -26,24 +26,15 @@ class Game
   end
 
   def computer_move
-    puts "Computer's turn"
     @computer.make_move(@board, @referee)
   end
 
   def human_move_succesful?(coordinates)
-    if available_location?(coordinates)
+    if @board.available_location?(coordinates)
       @human.make_move(@board, coordinates)
       return true
     else
       return false
     end
-  end
-
-  def available_location?(coordinates)
-    coor1, coor2 = coordinates.first, coordinates.last
-    matrix_rows = @board.get_tokens.each_slice(3).to_a
-    game_matrix = Matrix[matrix_rows[0], matrix_rows[1], matrix_rows[2]]
-
-    return game_matrix[coor1, coor2] != 'X' && game_matrix[coor1, coor2] != 'O'
   end
 end
