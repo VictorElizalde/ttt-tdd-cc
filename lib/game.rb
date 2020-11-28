@@ -30,11 +30,6 @@ class Game
   end
 
   def human_move_succesful?(coordinates)
-    if @board.available_location?(coordinates)
-      @human.make_move(@board, coordinates)
-      return true
-    else
-      return false
-    end
+    return @human.make_move?(@board, coordinates)
   end
 end

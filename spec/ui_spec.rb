@@ -39,7 +39,7 @@ describe "UI" do
     expect(ui.receive_token_coordinate(user_input1, user_input2)).to eq([1, 1])
     expect(board.get_token_at(1)).to eq('1')
 
-    human.make_move(board, ui.receive_token_coordinate(user_input1, user_input2))
+    human.make_move?(board, ui.receive_token_coordinate(user_input1, user_input2))
 
     expect(board.get_token_at(5)).to eq('X')
   end

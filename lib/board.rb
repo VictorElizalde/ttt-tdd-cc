@@ -39,21 +39,14 @@ class Board
     [[@tokens[0], @tokens[4], @tokens[8]], [@tokens[2], @tokens[4], @tokens[6]]]
   end
 
-  def available_location?(coordinates)
-    coor1, coor2 = coordinates.first, coordinates.last
-    game_matrix = get_matrix
-
-    return game_matrix[coor1, coor2] != 'X' && game_matrix[coor1, coor2] != 'O'
-  end
-
-  def get_matrix
-    matrix_rows = get_tokens.each_slice(3).to_a
-    game_matrix = Matrix[matrix_rows[0], matrix_rows[1], matrix_rows[2]]
-  end
-
-  def set_matrix_to_hash(game_array)
-    game_array.each_with_index do |val, index|
+  def parse_board(board_info)
+    board_info.each_with_index do |val, index|
       set_token_at(index + 1, val)
     end
+  end
+
+  def get_board_info
+    matrix_rows = get_tokens.each_slice(3).to_a
+    game_matrix = Matrix[matrix_rows[0], matrix_rows[1], matrix_rows[2]]
   end
 end
