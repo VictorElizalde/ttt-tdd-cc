@@ -1,11 +1,9 @@
 $LOAD_PATH.unshift File.expand_path(".", "lib")
 require 'human'
 require 'board'
-require 'ui'
 
 describe Human do
   let(:human) { Human.new('X') }
-  let(:ui) { UI.new }
   let(:board) { Board.new }
 
   it "sets player token in board" do
