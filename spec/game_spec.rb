@@ -22,7 +22,7 @@ describe "Game" do
       X O O
     ))
 
-    expect(game.evaluate_game).to eq("Tie")
+    expect(game.evaluate_game).to eq("Tie!")
   end
 
   it "returns 'X' as winner token" do
@@ -32,7 +32,7 @@ describe "Game" do
       X O X
     ))
 
-    expect(game.evaluate_game).to eq('X')
+    expect(game.evaluate_game).to eq('Winner is X!')
   end
 
   it "returns 'O' as winner token" do
@@ -42,7 +42,11 @@ describe "Game" do
       O O O
     ))
 
-    expect(game.evaluate_game).to eq('O')
+    expect(game.evaluate_game).to eq('Winner is O!')
+  end
+
+  it "is the human turn always in the first move" do
+    expect(game.human_turn).to eq(true)
   end
 
   it "changes turn of game" do
@@ -87,5 +91,53 @@ describe "Game" do
     game.human_move_succesful?([0,0])
 
     expect(game.board.get_token_at(1)).to eq('O')
+  end
+
+  it "prints tie because game is over" do
+    set_board_values(game.board, %w(
+      O X X
+      X X O
+      O O X
+    ))
+
+    expect { game.play_game }.to output("Tie!\n").to_stdout
+  end
+
+  it "prints winner is O because computer did last move" do
+    set_board_values(game.board, %w(
+      O X X
+      X X O
+      O O 9
+    ))
+
+    game.change_turn
+
+    expect { game.play_game }.to output("Winner is O!\n").to_stdout
+    expect(game.human_turn).to eq(true)
+  end
+
+  it "prints winner is X because human won" do
+    set_board_values(game.board, %w(
+      O X X
+      X X O
+      X O X
+    ))
+
+    expect { game.play_game }.to output("Winner is X!\n").to_stdout
+  end
+
+  it "prints board when game is finished" do
+    set_board_values(game.board, %w(
+      O X X
+      X X O
+      O O X
+    ))
+
+    expect(game.run_turns).to eq(<<-EOS
+        [O,X,X]
+        [X,X,O]
+        [O,O,X]
+      EOS
+    )
   end
 end
