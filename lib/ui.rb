@@ -7,7 +7,15 @@ class UI
     EOS
   end
 
-  def prints_user_instructions
-    puts 'Select coordinate between 1 and 9'
+  def prints_user_instructions(stdout: $stdout)
+    stdout.puts <<-EOS
+        Select coordinate, x: 0 - 2, y: 0 - 2
+    EOS
+  end
+
+  def prints_invalid_move(stdout: $stdout)
+    stdout.puts <<-EOS
+        Invalid move, try again
+    EOS
   end
 end

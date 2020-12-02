@@ -22,21 +22,24 @@ class Game
     print_results
   end
 
-  def print_results
-    puts evaluate_game
+  def print_results(stdout: $stdout)
+    stdout.puts <<-EOS
+        #{evaluate_game}
+    EOS
   end
 
-  def run_turns
+  def run_turns(coordinates = nil, stdout: $stdout)
     until @referee.game_over?(@board) || @referee.winner?(@board)
       if @human_turn
-        
+        human_move(coordinates)
       else
         computer_move
       end
 
       change_turn
     end
-    @ui.print(board)
+
+    stdout.puts @ui.print(board)
   end
 
   def change_turn
@@ -47,11 +50,23 @@ class Game
     @referee.tie?(@board) ? "Tie!" : "Winner is #{@referee.winner_token(@board)}!"
   end
 
-  def computer_move
+  def computer_move(stdout: $stdout)
+    stdout.puts <<-EOS
+        Computer\'s turn
+    EOS
     @computer.make_move(@board, @referee)
   end
 
   def human_move_succesful?(coordinates = nil)
     return @human.make_move?(@board, coordinates)
+  end
+
+  def human_move(coordinates = nil, stdout: $stdout)
+    stdout.puts @ui.print(board)
+    @ui.prints_user_instructions
+
+    until human_move_succesful?(coordinates)
+      @ui.prints_invalid_move
+    end
   end
 end
