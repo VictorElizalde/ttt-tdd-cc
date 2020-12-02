@@ -3,6 +3,5 @@ class Player
 
   def initialize(token)
     @token = token
-    @enemy_token = token == 'X' ? 'O' : 'X'
   end
 end
