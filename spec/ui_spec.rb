@@ -29,6 +29,16 @@ describe "UI" do
   end
 
   it "prints user instruction for token location" do
-    expect { ui.prints_user_instructions }.to output("Select coordinate between 1 and 9\n").to_stdout
+    expect { ui.prints_user_instructions }.to output(<<-EOS
+        Select coordinate, x: 0 - 2, y: 0 - 2
+      EOS
+    ).to_stdout
+  end
+
+  it "prints user indicator that move was invalid" do
+    expect{ ui.prints_invalid_move }.to output(<<-EOS
+        Invalid move, try again
+      EOS
+    ).to_stdout
   end
 end
