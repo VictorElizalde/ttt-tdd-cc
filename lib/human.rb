@@ -1,8 +1,7 @@
-$LOAD_PATH.unshift File.expand_path(".", "lib")
 require 'player'
 
 class Human < Player
-  def make_move?(board, coordinates = nil)
+  def did_move?(board, coordinates = nil)
     if coordinates == nil
       coordinates = receive_token_coordinate()
     end

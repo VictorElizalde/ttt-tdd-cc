@@ -4,6 +4,7 @@ require 'computer'
 require 'human'
 require 'referee'
 require 'game'
+require 'ui'
 
 
 describe "Game" do
@@ -22,7 +23,10 @@ describe "Game" do
       X O O
     ))
 
-    expect(game.evaluate_game).to eq("Tie!")
+    expect{ game.print_results }.to output(<<-EOS
+        Tie!
+      EOS
+    ).to_stdout
   end
 
   it "returns 'X' as winner token" do
@@ -32,7 +36,10 @@ describe "Game" do
       X O X
     ))
 
-    expect(game.evaluate_game).to eq('Winner is X!')
+    expect{ game.print_results }.to output(<<-EOS
+        Winner is X!
+      EOS
+    ).to_stdout
   end
 
   it "returns 'O' as winner token" do
@@ -42,7 +49,10 @@ describe "Game" do
       O O O
     ))
 
-    expect(game.evaluate_game).to eq('Winner is O!')
+    expect{ game.print_results }.to output(<<-EOS
+        Winner is O!
+      EOS
+    ).to_stdout
   end
 
   it "is the human turn always in the first move" do

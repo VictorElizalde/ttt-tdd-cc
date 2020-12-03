@@ -1,4 +1,3 @@
-$LOAD_PATH.unshift File.expand_path(".", "lib")
 require 'board'
 require 'game'
 require 'computer'

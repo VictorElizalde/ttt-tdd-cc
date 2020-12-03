@@ -1,3 +1,5 @@
+require 'ui'
+
 class Referee
   def possible_moves(board)
     board.get_tokens.reject { |token| token == 'X' || token == 'O' }
@@ -26,5 +28,9 @@ class Referee
     all_board.each do |combination|
       return combination.uniq.first if combination.uniq.length == 1
     end
+  end
+
+  def evaluate_game(board, ui)
+    tie?(board) ? ui.print_tie : ui.print_winner(winner_token(board))
   end
 end

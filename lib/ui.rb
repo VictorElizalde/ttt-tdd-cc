@@ -1,6 +1,6 @@
 class UI
-  def print(board)
-    <<-EOS
+  def print(board, stdout: $stdout)
+    stdout.puts <<-EOS
         [#{board.get_token_at(1)},#{board.get_token_at(2)},#{board.get_token_at(3)}]
         [#{board.get_token_at(4)},#{board.get_token_at(5)},#{board.get_token_at(6)}]
         [#{board.get_token_at(7)},#{board.get_token_at(8)},#{board.get_token_at(9)}]
@@ -16,6 +16,24 @@ class UI
   def prints_invalid_move(stdout: $stdout)
     stdout.puts <<-EOS
         Invalid move, try again
+    EOS
+  end
+
+  def print_tie(stdout: $stdout)
+    stdout.puts <<-EOS
+        Tie!
+    EOS
+  end
+
+  def print_winner(winner_token, stdout: $stdout)
+    stdout.puts <<-EOS
+        Winner is #{winner_token}!
+    EOS
+  end
+
+  def print_computer_turn(stdout: $stdout)
+    stdout.puts <<-EOS
+        Computer\'s turn
     EOS
   end
 end
