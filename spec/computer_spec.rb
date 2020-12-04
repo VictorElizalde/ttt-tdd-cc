@@ -5,9 +5,10 @@ require 'referee'
 
 
 describe Computer do
-  let(:computer) { Computer.new('O') }
+  let(:computer) { Computer.new('O', Referee.new) }
   let(:board) { Board.new }
   let(:referee) { Referee.new }
+  let(:ui) { UI.new }
 
   def set_board_values(board, array_values)
     array_values.each_with_index do |val, index|
@@ -26,7 +27,10 @@ describe Computer do
       7 8 9
     ))
 
-    computer.make_move(board, referee)
+    expect{ computer.did_move?(board, ui) }.to output(<<-EOS
+        Computer's turn
+      EOS
+    ).to_stdout
 
     expect(board.get_token_at(3)).to eq 'O'
   end
@@ -38,7 +42,10 @@ describe Computer do
       X 8 9
     ))
 
-    computer.make_move(board, referee)
+    expect{ computer.did_move?(board, ui) }.to output(<<-EOS
+        Computer's turn
+      EOS
+    ).to_stdout
 
     expect(board.get_token_at(3)).to eq 'O'
   end
@@ -50,7 +57,10 @@ describe Computer do
       7 8 X
     ))
 
-    computer.make_move(board, referee)
+    expect{ computer.did_move?(board, ui) }.to output(<<-EOS
+        Computer's turn
+      EOS
+    ).to_stdout
 
     expect(board.get_token_at(6)).to eq 'O'
   end
@@ -62,7 +72,10 @@ describe Computer do
       7 O X
     ))
 
-    computer.make_move(board, referee)
+    expect{ computer.did_move?(board, ui) }.to output(<<-EOS
+        Computer's turn
+      EOS
+    ).to_stdout
 
     expect(board.get_token_at(5)).to eq 'O'
   end
@@ -74,7 +87,10 @@ describe Computer do
       7 O X
     ))
 
-    computer.make_move(board, referee)
+    expect{ computer.did_move?(board, ui) }.to output(<<-EOS
+        Computer's turn
+      EOS
+    ).to_stdout
 
     expect(board.get_token_at(3)).to eq 'O'
   end
@@ -86,7 +102,10 @@ describe Computer do
       7 O X
     ))
 
-    computer.make_move(board, referee)
+    expect{ computer.did_move?(board, ui) }.to output(<<-EOS
+        Computer's turn
+      EOS
+    ).to_stdout
 
     expect(board.get_token_at(7)).to eq 'O'
   end

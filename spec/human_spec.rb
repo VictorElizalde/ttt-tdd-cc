@@ -1,9 +1,11 @@
 require 'human'
 require 'board'
+require 'ui'
 
 describe Human do
   let(:human) { Human.new('X') }
   let(:board) { Board.new }
+  let(:ui) { UI.new }
 
   def set_board_values(board, array_values)
     array_values.each_with_index do |val, index|
@@ -14,7 +16,13 @@ describe Human do
   it "sets player token in board" do
     expect(board.get_token_at(1)).to eq('1')
 
-    human.did_move?(board, [0,0])
+    expect{ human.did_move?(board, ui, [0,0]) }.to output(<<-EOS 
+        [1,2,3]
+        [4,5,6]
+        [7,8,9]
+        Select coordinate, x: 0 - 2, y: 0 - 2
+      EOS
+    ).to_stdout
 
     expect(board.get_token_at(1)).to eq('X')
   end
@@ -33,7 +41,13 @@ describe Human do
     expect(human.receive_token_coordinate(user_input1, user_input2)).to eq([1, 1])
     expect(board.get_token_at(1)).to eq('1')
 
-    human.did_move?(board, human.receive_token_coordinate(user_input1, user_input2))
+    expect{ human.did_move?(board, ui, human.receive_token_coordinate(user_input1, user_input2)) }.to output(<<-EOS 
+        [1,2,3]
+        [4,5,6]
+        [7,8,9]
+        Select coordinate, x: 0 - 2, y: 0 - 2
+      EOS
+    ).to_stdout
 
     expect(board.get_token_at(5)).to eq('X')
   end
@@ -46,7 +60,13 @@ describe Human do
     ))
     expect(board.get_token_at(1)).to eq('1')
 
-    expect(human.did_move?(board, [0,0])).to eq(true)
+    expect{ human.did_move?(board, ui, [0,0]) }.to output(<<-EOS 
+        [1,_,_]
+        [_,_,_]
+        [_,_,_]
+        Select coordinate, x: 0 - 2, y: 0 - 2
+      EOS
+    ).to_stdout
     expect(board.get_token_at(1)).to eq('X')
   end
 
@@ -58,7 +78,35 @@ describe Human do
     ))
     expect(board.get_token_at(1)).to eq('O')
 
-    expect(human.did_move?(board, [0,0])).to eq(false)
+    expect{ human.did_move?(board, ui, [0,0]) }.to output(<<-EOS 
+        [O,_,_]
+        [_,_,_]
+        [_,_,_]
+        Select coordinate, x: 0 - 2, y: 0 - 2
+      EOS
+    ).to_stdout
+    expect(board.get_token_at(1)).to eq('O')
+  end
+
+  it "does not put the token because location is already taken" do
+    user_input1 = 0
+    user_input2 = 0
+    set_board_values(board, %w(
+      O _ _
+      _ _ _
+      _ _ _
+    ))
+
+    expect(board.get_token_at(1)).to eq('O')
+
+    expect{ human.did_move?(board, ui, human.receive_token_coordinate(user_input1, user_input2)) }.to output(<<-EOS 
+        [O,_,_]
+        [_,_,_]
+        [_,_,_]
+        Select coordinate, x: 0 - 2, y: 0 - 2
+      EOS
+    ).to_stdout
+
     expect(board.get_token_at(1)).to eq('O')
   end
 end

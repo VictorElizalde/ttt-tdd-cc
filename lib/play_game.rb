@@ -6,5 +6,7 @@ require 'human'
 require 'referee'
 require 'ui'
 
-current_game = Game.new(Board.new, Human.new('X'), Computer.new('O'), UI.new, Referee.new)
+referee = Referee.new
+
+current_game = Game.new(Board.new, UI.new, referee, [Human.new('X'), Computer.new('O', referee)])
 current_game.play_game
