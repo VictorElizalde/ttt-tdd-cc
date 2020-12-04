@@ -1,4 +1,3 @@
-$LOAD_PATH.unshift File.expand_path(".", "lib")
 require 'board'
 require 'computer'
 require 'human'
@@ -22,13 +21,11 @@ class Game
     print_results
   end
 
-  def print_results(stdout: $stdout)
-    stdout.puts <<-EOS
-        #{evaluate_game}
-    EOS
+  def print_results
+    @referee.evaluate_game(@board, @ui)
   end
 
-  def run_turns(coordinates = nil, stdout: $stdout)
+  def run_turns(coordinates = nil)
     until @referee.game_over?(@board) || @referee.winner?(@board)
       if @human_turn
         human_move(coordinates)
@@ -39,30 +36,24 @@ class Game
       change_turn
     end
 
-    stdout.puts @ui.print(board)
+    @ui.print(board)
   end
 
   def change_turn
     @human_turn = !@human_turn
   end
 
-  def evaluate_game
-    @referee.tie?(@board) ? "Tie!" : "Winner is #{@referee.winner_token(@board)}!"
-  end
-
-  def computer_move(stdout: $stdout)
-    stdout.puts <<-EOS
-        Computer\'s turn
-    EOS
+  def computer_move
+    @ui.print_computer_turn
     @computer.make_move(@board, @referee)
   end
 
   def human_move_succesful?(coordinates = nil)
-    return @human.make_move?(@board, coordinates)
+    return @human.did_move?(@board, coordinates)
   end
 
-  def human_move(coordinates = nil, stdout: $stdout)
-    stdout.puts @ui.print(board)
+  def human_move(coordinates = nil)
+    @ui.print(board)
     @ui.prints_user_instructions
 
     until human_move_succesful?(coordinates)
