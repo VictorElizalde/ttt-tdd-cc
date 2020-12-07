@@ -1,7 +1,10 @@
 require 'player'
 
 class Human < Player
-  def did_move?(board, coordinates = nil)
+  def did_move?(board, ui, coordinates = nil)
+    ui.print(board)
+    ui.prints_user_instructions
+
     if coordinates == nil
       coordinates = receive_token_coordinate()
     end
