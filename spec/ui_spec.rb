@@ -61,4 +61,13 @@ describe "UI" do
       EOS
     ).to_stdout
   end
+
+  it "asks for input type" do
+    expect{ ui.ask_for_input_type }.to output(<<-EOS
+        Select input
+        1: terminal input
+        2: web browser input
+        EOS
+    ).to_stdout
+  end
 end

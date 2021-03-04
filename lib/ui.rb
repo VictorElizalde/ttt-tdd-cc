@@ -17,23 +17,34 @@ class UI
     stdout.puts <<-EOS
         Invalid move, try again
     EOS
+    "Invalid move, try again"
   end
 
   def print_tie(stdout: $stdout)
     stdout.puts <<-EOS
         Tie!
     EOS
+    "Tie!"
   end
 
   def print_winner(winner_token, stdout: $stdout)
     stdout.puts <<-EOS
         Winner is #{winner_token}!
     EOS
+    "Winner is #{winner_token}!"
   end
 
   def print_computer_turn(stdout: $stdout)
     stdout.puts <<-EOS
         Computer\'s turn
+    EOS
+  end
+
+  def ask_for_input_type(stdout: $stdout)
+    stdout.puts <<-EOS
+        Select input
+        1: terminal input
+        2: web browser input
     EOS
   end
 end
