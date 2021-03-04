@@ -9,7 +9,7 @@ class Computer < Player
     @referee = referee
   end
 
-  def did_move?(board, ui)
+  def did_move?(board, ui, input_type = nil)
     ui.print_computer_turn
 
     minimax(board, @token, 0)

@@ -1,9 +1,11 @@
 require 'human'
 require 'board'
 require 'ui'
+require 'terminal_input'
+require 'browser_input'
 
 describe Human do
-  let(:human) { Human.new('X') }
+  let(:human) { Human.new('X', TerminalInput.new, BrowserInput.new) }
   let(:board) { Board.new }
   let(:ui) { UI.new }
 
@@ -16,7 +18,7 @@ describe Human do
   it "sets player token in board" do
     expect(board.get_token_at(1)).to eq('1')
 
-    expect{ human.did_move?(board, ui, [0,0]) }.to output(<<-EOS 
+    expect{ human.did_move?(board, ui, "1", [0,0]) }.to output(<<-EOS 
         [1,2,3]
         [4,5,6]
         [7,8,9]
@@ -31,17 +33,17 @@ describe Human do
     user_input1 = '1'
     user_input2 = '1'
 
-    expect(human.receive_token_coordinate(user_input1, user_input2)).to eq([1, 1])
+    expect(human.receive_terminal_coordinates(user_input1, user_input2)).to eq([1, 1])
   end
 
   it "sets token in user input coordinate" do
     user_input1 = '1'
     user_input2 = '1'
 
-    expect(human.receive_token_coordinate(user_input1, user_input2)).to eq([1, 1])
+    expect(human.receive_terminal_coordinates(user_input1, user_input2)).to eq([1, 1])
     expect(board.get_token_at(1)).to eq('1')
 
-    expect{ human.did_move?(board, ui, human.receive_token_coordinate(user_input1, user_input2)) }.to output(<<-EOS 
+    expect{ human.did_move?(board, ui, "1", human.receive_terminal_coordinates(user_input1, user_input2)) }.to output(<<-EOS 
         [1,2,3]
         [4,5,6]
         [7,8,9]
@@ -60,7 +62,7 @@ describe Human do
     ))
     expect(board.get_token_at(1)).to eq('1')
 
-    expect{ human.did_move?(board, ui, [0,0]) }.to output(<<-EOS 
+    expect{ human.did_move?(board, ui, "1", [0,0]) }.to output(<<-EOS 
         [1,_,_]
         [_,_,_]
         [_,_,_]
@@ -78,7 +80,7 @@ describe Human do
     ))
     expect(board.get_token_at(1)).to eq('O')
 
-    expect{ human.did_move?(board, ui, [0,0]) }.to output(<<-EOS 
+    expect{ human.did_move?(board, ui, "1", [0,0]) }.to output(<<-EOS 
         [O,_,_]
         [_,_,_]
         [_,_,_]
@@ -99,7 +101,7 @@ describe Human do
 
     expect(board.get_token_at(1)).to eq('O')
 
-    expect{ human.did_move?(board, ui, human.receive_token_coordinate(user_input1, user_input2)) }.to output(<<-EOS 
+    expect{ human.did_move?(board, ui, "1", human.receive_terminal_coordinates(user_input1, user_input2)) }.to output(<<-EOS 
         [O,_,_]
         [_,_,_]
         [_,_,_]

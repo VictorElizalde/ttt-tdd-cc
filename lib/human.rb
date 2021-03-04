@@ -1,12 +1,23 @@
 require 'player'
 
 class Human < Player
-  def did_move?(board, ui, coordinates = nil)
+  attr_reader :terminal_input, :browser_input
+
+  def initialize(token, terminal_input, browser_input)
+    super(token)
+    @terminal_input = terminal_input
+    @browser_input = browser_input
+  end
+
+  def did_move?(board, ui, input_type = nil, coordinates = nil)
     ui.print(board)
     ui.prints_user_instructions
 
-    if coordinates == nil
-      coordinates = receive_token_coordinate()
+    case input_type
+    when "1"
+      coordinates = receive_terminal_coordinates() if coordinates == nil
+    when "2"
+      coordinates = receive_browser_coordinates()
     end
 
     if available_location?(board, coordinates)
@@ -17,10 +28,12 @@ class Human < Player
     end
   end
 
-  def receive_token_coordinate(user_input1 = nil, user_input2 = nil, stdin: $stdin)
-    user_input1 = stdin.gets.chomp if user_input1.nil?
-    user_input2 = stdin.gets.chomp if user_input2.nil?
-    [user_input1.to_i, user_input2.to_i]
+  def receive_terminal_coordinates(user_input1 = nil, user_input2 = nil)
+    @terminal_input.get_input(user_input1, user_input2)
+  end
+
+  def receive_browser_coordinates
+    @browser_input.get_input
   end
 
   private

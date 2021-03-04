@@ -1,5 +1,3 @@
-require 'ui'
-
 class Referee
   def possible_moves(board)
     board.get_tokens.reject { |token| token == 'X' || token == 'O' }
